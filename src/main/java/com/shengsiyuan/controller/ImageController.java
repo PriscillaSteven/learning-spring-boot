@@ -4,6 +4,7 @@ import com.shengsiyuan.domain.Image;
 import com.shengsiyuan.service.ImageService;
 import lombok.extern.java.Log;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.logging.Logger;
 
 public class ImageController {
@@ -74,5 +76,10 @@ public class ImageController {
     public Mono<String> index(Model model) {
         model.addAttribute("images", imageService.findAllImages());
         return Mono.just("index");
+    }
+
+    public Resource findOneImage(String filename) {
+        return imageService.findOneImage(filename)
+                .block(Duration.ofSeconds(30));
     }
 }
